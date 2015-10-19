@@ -47,7 +47,7 @@ public class View {
                 
         
         for (index = 0; index < bp.length; index++) {
-            bg[bp[index].getBoard_piece_location_y()][bp[index].getBoard_piece_location_x()] = [bp[index].getIcon();
+            bg[bp[index].getBoard_piece_location_y()][bp[index].getBoard_piece_location_x()] = bp[index].getIcon();
         }
         
         String temp;
@@ -233,8 +233,17 @@ public class View {
                 System.out.println("Enter the current coordinates of the piece you'd like to capture with. E.g. A1, B6 or E3");
             }
             
+            answer = userInput.next().toUpperCase();
             
+            if (answer.length() != 2) {
+                System.out.println("Invalid input. Ensure you're only entering two characters. The first will be a letter, either A,B,C,D,E or F. The second will be a number from 1 to 6.");
+            } else if ( (answer.charAt(0) < 'A' || answer.charAt(0) > 'F') || (answer.charAt(1) < '1' || answer.charAt(1) > '6') ){                
+                System.out.println("Illegal character(s). Ensure the first is either A,B,C,D,E or F. Ensure the second is either 1,2,3,4,5 or 6.");                                    
+                answer = "";
+            }
         }
+        
+        
     }
     
     /**
@@ -277,7 +286,7 @@ public class View {
         View self;
         
         boardGame = new char[][]  { {'P','P','P','P','P','P'}, 
-                                    {'P','P','P','P','P','P'}, 
+                                    {'P','P','P','P','P','P'},                                      
                                     {'+','+','+','+','+','+'}, 
                                     {'+','+','+','+','+','+'}, 
                                     {'S','S','S','S','S','S'}, 
