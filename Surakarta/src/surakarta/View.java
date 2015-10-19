@@ -4,9 +4,11 @@
  * and open the template in the editor.
  */
 
-import java.util.Scanner;
+
 
 package surakarta;
+
+import java.util.Scanner;
 
 /**
  * The class responsible for displaying the game board to the users.
