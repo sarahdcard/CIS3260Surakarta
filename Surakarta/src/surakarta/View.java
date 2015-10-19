@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+import java.util.Scanner;
+
 package surakarta;
 
 /**
@@ -19,23 +21,36 @@ public class View {
      * @param bp 
      */
     public void Show_Board(char[][] bg, Board_piece[] bp) {
-        int boardHeight;
+        String answer; //The user's resonse in a String object.
         
-        int boardRowIndex;
+        int boardHeight; //The number of rows in the char array that represents the actual board to be displayed.
         
-        int boardWidth;
+        int boardRowIndex; //The index that of the row in the displayBoard that is currently being printed.
         
-        int column;
+        int boardWidth; //The number of columns in the char array that represents the actual board to be displayed.
         
-        int dataRow;               
+        boolean captureMode; //A boolean to indicate whether the user has decided to move this turn or capture an opposing piece. True if the user decided to capture, false if they decided to move.
+        
+        int column; //The column currently being printed out.
+        
+        int dataRow; //The index of the row that is being checked in the passed in char array.
                 
-        char[][] displayBoard;
+        char[][] displayBoard; //A #D char array that will represent every single cell that will printed out to the user.
         
-        int row;
+        int index; //An index for looping through the Board_piece array.
+        
+        int row; //The row currently being printed out.
+        
+        Scanner userInput;
+                
+        
+        for (index = 0; index < bp.length; index++) {
+            bg[bp[index].getBoard_piece_location_y()][bp[index].getBoard_piece_location_x()] = [bp[index].getIcon();
+        }
         
         String temp;
         
-        boardHeight = 30;
+        boardHeight = 29;
         boardWidth = 30;
         boardRowIndex = 0;        
                
@@ -47,7 +62,7 @@ public class View {
         putStringInBoard(displayBoard, temp, boardWidth, boardRowIndex);
         boardRowIndex++; //set to 1
         
-        temp = "|	     |  |            |";
+        temp = "|            |  |            |";
         putStringInBoard(displayBoard, temp, boardWidth, boardRowIndex);
         boardRowIndex++; //set to 2
         
@@ -168,19 +183,70 @@ public class View {
         
         row = 0;
         
+        dataRow = 1;
+        
+        System.out.println("       A  B  C  D  E  F       ");
+        
         for (row = 0; row < boardHeight; row++) {
             for (column = 0; column < boardWidth; column++) {
                 System.out.print(displayBoard[row][column]);
             }
-            System.out.println(" " + Integer.toString(row + 1));
+            if (row > 7 && row < 21) {
+                if ( (row - 2) % 3 == 0) {
+                    System.out.println(" " + Integer.toString(dataRow + 1));
+                    dataRow++;
+                }
+            }
+            
+        }
+        
+        
+        userInput = new Scanner(System.in);
+        
+        answer = "";
+        //Ask the user if they want to move or capture
+        while (answer.length() != 1) {
+            System.out.println("Would you like to (M)ove or (C)apture?");
+            answer = userInput.nextLine().toUpperCase();
+            
+            if (answer.length() != 1) {
+                System.out.println("Invalid input, only one character is required to enter. Press 'M' to move or 'C' to capture.");
+            } else if (!answer.equals("M") && !answer.equals("C")) {
+                System.out.println("Invalid input, press 'M' to Move one of your pieces, or 'C' to Capture one of the opponent's pieces with your piece.");
+                answer = "";
+            }
+        }
+        
+        //Ask user what piece they'd like to move/capture with
+        if (answer.equals("M")) {
+            captureMode = false;            
+        } else {
+            captureMode = true;            
+        }
+               
+        while (answer.length() != 2) {
+            if (captureMode) {
+                System.out.println("Enter the current coordinates of the piece you'd like to move. E.g. A1, B6 or E3");
+            } else {
+                System.out.println("Enter the current coordinates of the piece you'd like to capture with. E.g. A1, B6 or E3");
+            }
+            
+            
         }
     }
     
+    /**
+     * A method used to insert a String object into the passed in displayBoard using the boardRowIndex.
+     * @param displayBoard - The board to be printed out and displayed.
+     * @param line - The string of characters that will be inserted into the displayBoard.
+     * @param boardWidth - The number of elements in the 2nd dimension of displayBoard. Used to ensure the length matches the length of 'line'.
+     * @param boardRowIndex - The index to be used for the 1st dimension of displayBoard.
+     */
     private void putStringInBoard(char[][] displayBoard, String line, int boardWidth, int boardRowIndex) {
         int i;
         
-        if (boardWidth > line.length() ) {
-            throw new IllegalArgumentException("Argument line exceeds the width of the board.");
+        if (boardWidth < line.length() ) {
+            throw new IllegalArgumentException("Argument line exceeds the width of the board. boardWidth = " + Integer.toString(boardWidth) + ", line length = " + Integer.toString(line.length()));
         }
         
         if (boardRowIndex < 0) {
@@ -201,5 +267,25 @@ public class View {
      */
     public void Display_Score(Player[] p, int number, int tg) {
         
+    }
+    
+    public static void main(String[] args) {
+        char[][] boardGame;
+        Board_piece[] boardPiece;
+        View self;
+        
+        boardGame = new char[][]  { {'P','P','P','P','P','P'}, 
+                                    {'P','P','P','P','P','P'}, 
+                                    {'+','+','+','+','+','+'}, 
+                                    {'+','+','+','+','+','+'}, 
+                                    {'S','S','S','S','S','S'}, 
+                                    {'S','S','S','S','S','S'} };
+        
+        boardPiece = new Board_piece[5];
+        
+        self = new View();
+        
+        System.out.println("Calling 'Show_Board'");
+        self.Show_Board(boardGame, boardPiece);
     }
 }
